@@ -2,7 +2,7 @@
 
 A complete AR product preview application built with React Native, featuring dynamic 3D model loading, user authentication, and AR interaction capabilities.
 
-## 🚀 Features
+##  Features
 
 - **Augmented Reality Product Preview**: Place 3D models in real-world environments using ARCore (Android) and ARKit (iOS)
 - **Dynamic Model Loading**: Fetch 3D models from backend API (not hardcoded)
@@ -14,7 +14,7 @@ A complete AR product preview application built with React Native, featuring dyn
 - **Favorites**: Save and manage favorite products
 - **Product Catalog**: Browse products by category
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 .
@@ -32,7 +32,7 @@ A complete AR product preview application built with React Native, featuring dyn
         └── services/    # API service layer
 ```
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 ### Frontend
 - React Native 0.77.1
@@ -48,7 +48,7 @@ A complete AR product preview application built with React Native, featuring dyn
 - JWT Authentication
 - bcryptjs for password hashing
 
-## 📋 Prerequisites
+##   Prerequisites
 
 - Node.js >= 18
 - MongoDB (installed and running)
@@ -56,7 +56,7 @@ A complete AR product preview application built with React Native, featuring dyn
 - Android Studio (for Android) or Xcode (for iOS)
 - ARCore-enabled Android device or ARKit-enabled iOS device
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Backend Setup
 
@@ -126,14 +126,14 @@ npm run android
 npm run ios
 ```
 
-## 📚 Documentation
+##   Documentation
 
 - [SETUP.md](./SETUP.md) - Detailed setup instructions
 - [PROJECT_SUMMARY.md](./PROJECT_SUMMARY.md) - Project overview
 - [VIRO_SETUP.md](./VIRO_SETUP.md) - ViroReact native setup
 - [DEVELOPMENT_STATUS.md](./DEVELOPMENT_STATUS.md) - Current development status
 
-## 🔑 API Endpoints
+##   API Endpoints
 
 ### Authentication
 - `POST /api/auth/register` - Register new user
@@ -153,24 +153,24 @@ npm run ios
 - `DELETE /api/favorites/:modelId` - Remove from favorites (Protected)
 - `GET /api/favorites/check/:modelId` - Check if favorite (Protected)
 
-## ⚠️ Important Notes
+##  Important Notes
 
 1. **AR Features**: Only work on physical devices (ARCore/ARKit required)
 2. **ViroReact**: Requires additional native setup (see VIRO_SETUP.md)
 3. **Environment Variables**: Never commit `.env` files to version control
 4. **API Configuration**: Update API URLs for your environment
 
-## 🧪 Testing
+##  Testing
 
 Test credentials (after seeding):
 - Email: `test@example.com`
 - Password: `test123`
 
-## 📝 License
+##   License
 
 This project is for educational/demonstration purposes.
 
-## 👤 Author
+##   Author
 
 React Native Intern Assignment
 
