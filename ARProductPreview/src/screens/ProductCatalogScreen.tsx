@@ -63,44 +63,62 @@ const ProductCatalogScreen = ({ navigation }: any) => {
 
   return (
     <View style={styles.container}>
+      {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Product Catalog</Text>
+        <View>
+          <Text style={styles.headerTitle}>Product Catalog</Text>
+          <Text style={styles.headerSubtitle}>Explore our AR products</Text>
+        </View>
       </View>
 
-      <FlatList
-        horizontal
-        data={categories}
-        keyExtractor={(item) => item}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={[
-              styles.categoryChip,
-              selectedCategory === (item === 'All' ? null : item) && styles.categoryChipActive,
-            ]}
-            onPress={() => setSelectedCategory(item === 'All' ? null : item)}>
-            <Text
+      {/* Categories */}
+      <View style={styles.categoriesContainer}>
+        <FlatList
+          horizontal
+          data={categories}
+          keyExtractor={(item) => item}
+          renderItem={({ item }) => (
+            <TouchableOpacity
               style={[
-                styles.categoryText,
-                selectedCategory === (item === 'All' ? null : item) && styles.categoryTextActive,
-              ]}>
-              {item}
-            </Text>
-          </TouchableOpacity>
-        )}
-        style={styles.categoriesList}
-        showsHorizontalScrollIndicator={false}
-      />
+                styles.categoryChip,
+                selectedCategory === (item === 'All' ? null : item) && styles.categoryChipActive,
+              ]}
+              onPress={() => setSelectedCategory(item === 'All' ? null : item)}
+              activeOpacity={0.7}>
+              <Text
+                style={[
+                  styles.categoryText,
+                  selectedCategory === (item === 'All' ? null : item) && styles.categoryTextActive,
+                ]}>
+                {item}
+              </Text>
+            </TouchableOpacity>
+          )}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.categoriesList}
+        />
+      </View>
 
+      {/* Products Grid */}
       <FlatList
         data={models}
         renderItem={renderItem}
         keyExtractor={(item) => item._id}
         numColumns={2}
         contentContainerStyle={styles.list}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor="#007AFF"
+            colors={['#007AFF']}
+          />
+        }
         ListEmptyComponent={
-          <View style={styles.center}>
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyIcon}>📦</Text>
             <Text style={styles.emptyText}>No products found</Text>
+            <Text style={styles.emptySubtext}>Try selecting a different category</Text>
           </View>
         }
       />
@@ -111,84 +129,120 @@ const ProductCatalogScreen = ({ navigation }: any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#F8F9FA',
   },
   header: {
-    padding: 20,
-    backgroundColor: '#fff',
+    paddingTop: 60,
+    paddingBottom: 20,
+    paddingHorizontal: 20,
+    backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#eee',
+    borderBottomColor: '#E5E7EB',
   },
   headerTitle: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#333',
+    fontSize: 32,
+    fontWeight: '700',
+    color: '#1A1A1A',
+    marginBottom: 4,
+    letterSpacing: -0.5,
+  },
+  headerSubtitle: {
+    fontSize: 14,
+    color: '#666',
+  },
+  categoriesContainer: {
+    backgroundColor: '#FFFFFF',
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E7EB',
   },
   categoriesList: {
-    maxHeight: 50,
-    paddingVertical: 10,
-    paddingHorizontal: 10,
-    backgroundColor: '#fff',
+    paddingHorizontal: 16,
   },
   categoryChip: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
     borderRadius: 20,
-    backgroundColor: '#f0f0f0',
-    marginHorizontal: 5,
+    backgroundColor: '#F3F4F6',
+    marginRight: 8,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
   },
   categoryChipActive: {
     backgroundColor: '#007AFF',
+    borderColor: '#007AFF',
   },
   categoryText: {
     color: '#666',
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: '600',
   },
   categoryTextActive: {
-    color: '#fff',
+    color: '#FFFFFF',
   },
   list: {
-    padding: 10,
+    padding: 12,
+    paddingBottom: 100,
   },
   card: {
     flex: 1,
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    margin: 5,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    margin: 6,
     overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 4,
+    borderWidth: 1,
+    borderColor: '#F3F4F6',
   },
   thumbnail: {
     width: '100%',
-    height: 150,
-    backgroundColor: '#f0f0f0',
+    height: 160,
+    backgroundColor: '#F3F4F6',
+    resizeMode: 'cover',
   },
   cardContent: {
-    padding: 12,
+    padding: 14,
   },
   cardTitle: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 4,
+    fontWeight: '700',
+    color: '#1A1A1A',
+    marginBottom: 6,
   },
   cardCategory: {
-    fontSize: 12,
+    fontSize: 13,
     color: '#666',
+    fontWeight: '500',
   },
   center: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 80,
+  },
+  emptyIcon: {
+    fontSize: 64,
+    marginBottom: 16,
+  },
   emptyText: {
-    fontSize: 16,
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#333',
+    marginBottom: 8,
+  },
+  emptySubtext: {
+    fontSize: 14,
     color: '#666',
+    textAlign: 'center',
   },
 });
 

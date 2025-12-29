@@ -38,9 +38,9 @@ const ARViewScreen = ({ route, navigation }: ARViewScreenProps) => {
 
   // Model state
   const modelRef = useRef<any>(null);
-  const [position, setPosition] = useState([0, 0, -1]);
-  const [rotation, setRotation] = useState([0, 0, 0]);
-  const [scale, setScale] = useState([1, 1, 1]);
+  const [position, setPosition] = useState<[number, number, number]>([0, 0, -1]);
+  const [rotation, setRotation] = useState<[number, number, number]>([0, 0, 0]);
+  const [scale, setScale] = useState<[number, number, number]>([1, 1, 1]);
   const [isPlaced, setIsPlaced] = useState(false);
 
   // Check if favorite on mount
@@ -94,13 +94,13 @@ const ARViewScreen = ({ route, navigation }: ARViewScreenProps) => {
     };
 
     const onDrag = (dragToPos: number[]) => {
-      setPosition(dragToPos);
+      setPosition([dragToPos[0], dragToPos[1], dragToPos[2]] as [number, number, number]);
     };
 
     const onRotate = (rotateState: any, rotationFactor: number, source: any) => {
       if (rotateState === 3) {
         // Rotation ended
-        const newRotation = [
+        const newRotation: [number, number, number] = [
           rotation[0],
           rotation[1] + rotationFactor * 180,
           rotation[2],
@@ -118,7 +118,7 @@ const ARViewScreen = ({ route, navigation }: ARViewScreenProps) => {
           scale[2] * scaleFactor,
         ];
         // Limit scale between 0.5 and 3
-        const clampedScale = [
+        const clampedScale: [number, number, number] = [
           Math.max(0.5, Math.min(3, newScale[0])),
           Math.max(0.5, Math.min(3, newScale[1])),
           Math.max(0.5, Math.min(3, newScale[2])),
@@ -192,38 +192,66 @@ const ARViewScreen = ({ route, navigation }: ARViewScreenProps) => {
       />
 
       <View style={styles.controls}>
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Text style={styles.backButtonText}>← Back</Text>
-        </TouchableOpacity>
+        {/* Top Bar */}
+        <View style={styles.topBar}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+            activeOpacity={0.7}>
+            <Text style={styles.backButtonText}>←</Text>
+          </TouchableOpacity>
 
-        <View style={styles.infoContainer}>
-          <Text style={styles.modelName}>{model.name}</Text>
-          <Text style={styles.modelCategory}>{model.category}</Text>
+          <View style={styles.infoContainer}>
+            <Text style={styles.modelName} numberOfLines={1}>
+              {model.name}
+            </Text>
+            <Text style={styles.modelCategory}>{model.category}</Text>
+          </View>
         </View>
 
-        <TouchableOpacity
-          style={[styles.favoriteButton, isFavorite && styles.favoriteButtonActive]}
-          onPress={toggleFavorite}
-          disabled={loading}>
-          {loading ? (
-            <ActivityIndicator color="#fff" size="small" />
-          ) : (
-            <Text style={styles.favoriteButtonText}>
-              {isFavorite ? '❤️ Favorited' : '🤍 Favorite'}
-            </Text>
-          )}
-        </TouchableOpacity>
-
+        {/* Instructions */}
         {!isPlaced && (
           <View style={styles.instructionBox}>
-            <Text style={styles.instructionTitle}>Instructions:</Text>
-            <Text style={styles.instructionItem}>• Point camera at floor or table</Text>
-            <Text style={styles.instructionItem}>• Tap to place model</Text>
-            <Text style={styles.instructionItem}>• Pinch to scale</Text>
-            <Text style={styles.instructionItem}>• Rotate with two fingers</Text>
-            <Text style={styles.instructionItem}>• Drag to move</Text>
+            <View style={styles.instructionHeader}>
+              <Text style={styles.instructionIcon}>📱</Text>
+              <Text style={styles.instructionTitle}>AR Instructions</Text>
+            </View>
+            <View style={styles.instructionList}>
+              <View style={styles.instructionRow}>
+                <Text style={styles.instructionBullet}>1</Text>
+                <Text style={styles.instructionItem}>Point camera at floor or table</Text>
+              </View>
+              <View style={styles.instructionRow}>
+                <Text style={styles.instructionBullet}>2</Text>
+                <Text style={styles.instructionItem}>Tap to place model</Text>
+              </View>
+              <View style={styles.instructionRow}>
+                <Text style={styles.instructionBullet}>3</Text>
+                <Text style={styles.instructionItem}>Pinch to scale • Rotate • Drag to move</Text>
+              </View>
+            </View>
           </View>
         )}
+
+        {/* Bottom Actions */}
+        <View style={styles.bottomActions}>
+          <TouchableOpacity
+            style={[styles.favoriteButton, isFavorite && styles.favoriteButtonActive]}
+            onPress={toggleFavorite}
+            disabled={loading}
+            activeOpacity={0.8}>
+            {loading ? (
+              <ActivityIndicator color="#fff" size="small" />
+            ) : (
+              <>
+                <Text style={styles.favoriteIcon}>{isFavorite ? '❤️' : '🤍'}</Text>
+                <Text style={styles.favoriteButtonText}>
+                  {isFavorite ? 'Favorited' : 'Add to Favorites'}
+                </Text>
+              </>
+            )}
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -244,76 +272,131 @@ const styles = StyleSheet.create({
     bottom: 0,
     pointerEvents: 'box-none',
   },
+  topBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingTop: 50,
+    paddingHorizontal: 20,
+    paddingBottom: 12,
+  },
   backButton: {
-    position: 'absolute',
-    top: 50,
-    left: 20,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
   },
   backButtonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 24,
     fontWeight: '600',
   },
   infoContainer: {
-    position: 'absolute',
-    top: 50,
-    right: 20,
+    flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    padding: 12,
-    borderRadius: 8,
-    maxWidth: 200,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 12,
   },
   modelName: {
     color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 18,
+    fontWeight: '700',
     marginBottom: 4,
   },
   modelCategory: {
-    color: '#ccc',
-    fontSize: 12,
-  },
-  favoriteButton: {
-    position: 'absolute',
-    bottom: 100,
-    left: 20,
-    right: 20,
-    backgroundColor: 'rgba(0, 122, 255, 0.9)',
-    padding: 16,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  favoriteButtonActive: {
-    backgroundColor: 'rgba(255, 59, 48, 0.9)',
-  },
-  favoriteButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
+    color: '#E5E7EB',
+    fontSize: 13,
+    fontWeight: '500',
   },
   instructionBox: {
     position: 'absolute',
-    bottom: 180,
+    bottom: 120,
     left: 20,
     right: 20,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    padding: 16,
-    borderRadius: 8,
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    padding: 20,
+    borderRadius: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 12,
+    elevation: 8,
+  },
+  instructionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  instructionIcon: {
+    fontSize: 24,
+    marginRight: 8,
   },
   instructionTitle: {
+    color: '#1A1A1A',
+    fontSize: 18,
+    fontWeight: '700',
+  },
+  instructionList: {
+    gap: 12,
+  },
+  instructionRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
+  instructionBullet: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: '#007AFF',
     color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 8,
+    fontSize: 12,
+    fontWeight: '700',
+    textAlign: 'center',
+    lineHeight: 24,
+    marginRight: 12,
   },
   instructionItem: {
-    color: '#fff',
+    flex: 1,
+    color: '#333',
     fontSize: 14,
-    marginBottom: 4,
+    lineHeight: 20,
+    fontWeight: '500',
+  },
+  bottomActions: {
+    position: 'absolute',
+    bottom: 40,
+    left: 20,
+    right: 20,
+  },
+  favoriteButton: {
+    flexDirection: 'row',
+    backgroundColor: '#007AFF',
+    padding: 18,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#007AFF',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  favoriteButtonActive: {
+    backgroundColor: '#FF3B30',
+    shadowColor: '#FF3B30',
+  },
+  favoriteIcon: {
+    fontSize: 20,
+    marginRight: 8,
+  },
+  favoriteButtonText: {
+    color: '#fff',
+    fontSize: 17,
+    fontWeight: '700',
+    letterSpacing: 0.3,
   },
   instructionText: {
     fontSize: 20,

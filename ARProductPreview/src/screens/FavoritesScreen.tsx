@@ -55,7 +55,12 @@ const FavoritesScreen = ({ navigation }: any) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>My Favorites</Text>
+        <View>
+          <Text style={styles.headerTitle}>My Favorites</Text>
+          <Text style={styles.headerSubtitle}>
+            {favorites.length} {favorites.length === 1 ? 'item' : 'items'} saved
+          </Text>
+        </View>
       </View>
 
       <FlatList
@@ -65,9 +70,12 @@ const FavoritesScreen = ({ navigation }: any) => {
         numColumns={2}
         contentContainerStyle={styles.list}
         ListEmptyComponent={
-          <View style={styles.center}>
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyIcon}>❤️</Text>
             <Text style={styles.emptyText}>No favorites yet</Text>
-            <Text style={styles.emptySubtext}>Browse products and add them to favorites</Text>
+            <Text style={styles.emptySubtext}>
+              Browse products and tap the heart icon to add them to favorites
+            </Text>
           </View>
         }
       />
@@ -78,51 +86,64 @@ const FavoritesScreen = ({ navigation }: any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#F8F9FA',
   },
   header: {
-    padding: 20,
-    backgroundColor: '#fff',
+    paddingTop: 60,
+    paddingBottom: 20,
+    paddingHorizontal: 20,
+    backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#eee',
+    borderBottomColor: '#E5E7EB',
   },
   headerTitle: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#333',
+    fontSize: 32,
+    fontWeight: '700',
+    color: '#1A1A1A',
+    marginBottom: 4,
+    letterSpacing: -0.5,
+  },
+  headerSubtitle: {
+    fontSize: 14,
+    color: '#666',
   },
   list: {
-    padding: 10,
+    padding: 12,
+    paddingBottom: 100,
   },
   card: {
     flex: 1,
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    margin: 5,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    margin: 6,
     overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 4,
+    borderWidth: 1,
+    borderColor: '#F3F4F6',
   },
   thumbnail: {
     width: '100%',
-    height: 150,
-    backgroundColor: '#f0f0f0',
+    height: 160,
+    backgroundColor: '#F3F4F6',
+    resizeMode: 'cover',
   },
   cardContent: {
-    padding: 12,
+    padding: 14,
   },
   cardTitle: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 4,
+    fontWeight: '700',
+    color: '#1A1A1A',
+    marginBottom: 6,
   },
   cardCategory: {
-    fontSize: 12,
+    fontSize: 13,
     color: '#666',
+    fontWeight: '500',
   },
   center: {
     flex: 1,
@@ -130,16 +151,29 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
   },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 80,
+    paddingHorizontal: 40,
+  },
+  emptyIcon: {
+    fontSize: 64,
+    marginBottom: 16,
+  },
   emptyText: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#333',
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#1A1A1A',
     marginBottom: 8,
+    textAlign: 'center',
   },
   emptySubtext: {
     fontSize: 14,
     color: '#666',
     textAlign: 'center',
+    lineHeight: 20,
   },
 });
 
